@@ -9,6 +9,8 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 app.use(cors());
 app.use(express.json());
 
+// const uri = 'mongodb://localhost:27017';
+
 const uri =`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@3prl4wl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 const client = new MongoClient(uri, {
@@ -20,9 +22,23 @@ const client = new MongoClient(uri, {
 });
 
 // 👉 Keep structure same: declare here
-let coffeesColection;
+// let coffeesColection;
 
-// ------------------------------------------------------------------//
+
+async function run() {
+  try {
+    // await client.connect();
+    // 👉 Now set it here after client is connected
+
+
+
+    const coffeesColection = client.db('coffeeDb').collection('coffees');
+    const usersColection = client.db('coffeeDb').collection('users');
+
+
+
+
+    // ------------------------------------------------------------------//
 
 // get coffee to show display 
 app.get('/coffees', async (req, res) => {
@@ -83,13 +99,55 @@ app.delete('/coffees/:id', async (req, res) => {
     res.send(result);
 })
 
+// user realeated info -----------------------------------------------//
+
+    app.post('/users', async (req, res) => {
+      const userProfile = req.body
+      const result = await usersColection.insertOne(userProfile);
+      res.send(result);
+    })
+    
+    //--------------------------------------------------------------------//
+    
+    // get user to show user data 
+
+    app.get('/users', async (req, res) => {
+      const result = await usersColection.find().toArray();
+      res.send(result)
+    })
+
+    //------------------------------------------------------------------//
+
+    //delete user into db
+
+    app.delete('/users/:id', async (req, res) => {
+      const id = req.params.id;
+      const quary = { _id: new ObjectId(id) };
+      const result = await usersColection.deleteOne(quary);
+      res.send(result)
+
+    })
+
+    // ---------------------------------------------------------------//
+
+    // last signin time
+
+    app.patch("/users", async (req, res) => {
+      const { email, lastSignInTime } = req.body;
+      const filter = { email: email };
+      const updatedDoc = {
+        $set: {
+          lastSignInTime: lastSignInTime
+        }
+      }
+      const result = usersColection.updateOne.filter(filter, updatedDoc);
+      res.send(result);
+    })
+
 // ------------------------------------------------------------------//
 
-async function run() {
-  try {
-    await client.connect();
-    // 👉 Now set it here after client is connected
-    coffeesColection = client.db('coffeeDb').collection('coffees');
+
+
     console.log("MongoDB connected successfully!");
   } catch (error) {
     console.error("MongoDB connection failed:", error);
