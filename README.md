@@ -40,6 +40,16 @@ This is the **server-side** of the **Espresso Emporium** project, a full-stack c
 
 You need to create a `.env` file at the root of your project with the following:
 
+## Clone And Setup
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/mohammadsanvi/espresso-emporium-server-site.git
+cd espresso-emporium-server-site
+nodemon index.js
+
+
 ```env
 DB_USER=your_mongodb_user
 DB_PASS=your_mongodb_password
