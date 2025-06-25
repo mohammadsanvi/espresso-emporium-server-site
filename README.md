@@ -51,4 +51,4 @@ Environment Variables
 
 DB_USER=your_mongodb_user
 DB_PASS=your_mongodb_password
-PORT=5000
+PORT=3000
