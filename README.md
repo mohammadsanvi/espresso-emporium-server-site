@@ -42,15 +42,13 @@ You need to create a `.env` file at the root of your project with the following:
 
 ## Clone And Setup
 
-### Clone the Repository
-
 ```bash
 git clone https://github.com/mohammadsanvi/espresso-emporium-server-site.git
 cd espresso-emporium-server-site
 nodemon index.js
 
+Environment Variables
 
-```env
 DB_USER=your_mongodb_user
 DB_PASS=your_mongodb_password
 PORT=5000
